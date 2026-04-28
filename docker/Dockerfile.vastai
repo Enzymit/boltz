@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=vastai/base-image:cuda-12.4.1-auto
+ARG BASE_IMAGE=vastai/base-image:cuda-13.2.0-auto
 FROM ${BASE_IMAGE}
 
 ENV PYTHONUNBUFFERED=1 \
