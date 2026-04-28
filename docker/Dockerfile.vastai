@@ -23,10 +23,8 @@ RUN ln -sf /usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib/libnvrtc-buil
 
 RUN python3 -c "import torch; print(torch.__version__, torch.version.cuda)"
 
-python3 - <<'PY'
-
+RUN python3 - <<'PY'
 from pathlib import Path
-
 from boltz.main import download_boltz1, download_boltz2
 
 cache = Path("/opt/boltz_cache")
