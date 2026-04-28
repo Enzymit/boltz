@@ -16,8 +16,15 @@ RUN apt-get update \
         python3 -m pip install ".[${BOLTZ_EXTRAS}]"; \
     else \
         python3 -m pip install .; \
-    fi \
-    && python3 - <<'PY'
+    fi 
+
+RUN ln -sf /usr/local/lib/python3.12/dist-packages/nvidia/cu13/lib/libnvrtc-builtins.so.13.0 \
+    /usr/local/cuda/targets/x86_64-linux/lib/libnvrtc-builtins.so.13.0
+
+RUN python3 -c "import torch; print(torch.__version__, torch.version.cuda)"
+
+python3 - <<'PY'
+
 from pathlib import Path
 
 from boltz.main import download_boltz1, download_boltz2
