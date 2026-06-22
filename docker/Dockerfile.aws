@@ -34,6 +34,12 @@ RUN apt-get update \
 WORKDIR /opt/boltz
 COPY . /opt/boltz
 
+ARG PYTORCH_VERSION=2.7.1
+ARG PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cu128
+RUN python3 -m pip install \
+    "torch==${PYTORCH_VERSION}" \
+    --index-url "${PYTORCH_INDEX_URL}"
+
 ARG BOLTZ_EXTRAS=cuda
 RUN if [ -n "${BOLTZ_EXTRAS}" ]; then \
         python3 -m pip install ".[${BOLTZ_EXTRAS}]"; \
@@ -41,7 +47,13 @@ RUN if [ -n "${BOLTZ_EXTRAS}" ]; then \
         python3 -m pip install .; \
     fi
 
-RUN python3 -c "import torch; print(torch.__version__, torch.version.cuda)"
+RUN python3 - <<'PY'
+import torch
+
+print(f"PyTorch: {torch.__version__}")
+print(f"PyTorch CUDA: {torch.version.cuda}")
+assert torch.version.cuda == "12.8", torch.version.cuda
+PY
 
 RUN python3 - <<'PY'
 from pathlib import Path
